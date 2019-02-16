@@ -10,7 +10,6 @@
  * Domain Path: /languages/
  * @package Mantrabrain_Starter_Sites
  */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
