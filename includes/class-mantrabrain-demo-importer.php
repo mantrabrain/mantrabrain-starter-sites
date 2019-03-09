@@ -529,6 +529,7 @@ class Mantrabrain_Demo_Importer {
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 */
 	public function ajax_import_demo() {
+
 		check_ajax_referer( 'updates' );
 
 		if ( empty( $_POST['slug'] ) ) {
@@ -538,8 +539,9 @@ class Mantrabrain_Demo_Importer {
 				'errorMessage' => __( 'No demo specified.', 'mantrabrain-starter-sites' ),
 			) );
 		}
+        set_time_limit(1500);
 
-		$slug   = sanitize_key( wp_unslash( $_POST['slug'] ) );
+        $slug   = sanitize_key( wp_unslash( $_POST['slug'] ) );
 		$status = array(
 			'import' => 'demo',
 			'slug'   => $slug,
