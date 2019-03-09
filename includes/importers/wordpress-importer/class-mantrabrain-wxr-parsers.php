@@ -31,7 +31,7 @@ class Mantrabrain_WXR_Parser {
 		}
 
 		// We have a malformed XML file, so display the error and fallthrough to regex
-		if ( isset($result) && defined('IMPORT_DEBUG') && IMPORT_DEBUG ) {
+		if ( isset($result) && defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG ) {
 			echo '<pre>';
 			if ( 'SimpleXML_parse_error' == $result->get_error_code() ) {
 				foreach  ( $result->get_error_data() as $error )

@@ -18,7 +18,7 @@ if ( ! class_exists( 'WP_Importer' ) ) {
 }
 
 /** Display verbose errors */
-define( 'IMPORT_DEBUG', false );
+define( 'MBSS_IMPORT_DEBUG', false );
 
 // Include WXR file parsers.
 require dirname( __FILE__ ) . '/class-mantrabrain-wxr-parsers.php';
@@ -361,7 +361,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 					$this->author_mapping[$santized_old_login] = $user_id;
 				} else {
 					printf( __( 'Failed to create new user for %s. Their posts will be attributed to the current user.', 'mantrabrain-starter-sites' ), esc_html($this->authors[$old_login]['author_display_name']) );
-					if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
+					if ( defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG )
 						echo ' ' . $user_id->get_error_message();
 					echo '<br />';
 				}
@@ -413,7 +413,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 					$this->processed_terms[intval($cat['term_id'])] = $id;
 			} else {
 				printf( __( 'Failed to import category %s', 'mantrabrain-starter-sites' ), esc_html($cat['category_nicename']) );
-				if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
+				if ( defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG )
 					echo ': ' . $id->get_error_message();
 				echo '<br />';
 				continue;
@@ -456,7 +456,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 					$this->processed_terms[intval($tag['term_id'])] = $id['term_id'];
 			} else {
 				printf( __( 'Failed to import post tag %s', 'mantrabrain-starter-sites' ), esc_html($tag['tag_name']) );
-				if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
+				if ( defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG )
 					echo ': ' . $id->get_error_message();
 				echo '<br />';
 				continue;
@@ -505,7 +505,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 					$this->processed_terms[intval($term['term_id'])] = $id['term_id'];
 			} else {
 				printf( __( 'Failed to import %s %s', 'mantrabrain-starter-sites' ), esc_html($term['term_taxonomy']), esc_html($term['term_name']) );
-				if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
+				if ( defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG )
 					echo ': ' . $id->get_error_message();
 				echo '<br />';
 				continue;
@@ -694,7 +694,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 				if ( is_wp_error( $post_id ) ) {
 					printf( __( 'Failed to import %s &#8220;%s&#8221;', 'mantrabrain-starter-sites' ),
 						$post_type_object->labels->singular_name, esc_html($post['post_title']) );
-					if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
+					if ( defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG )
 						echo ': ' . $post_id->get_error_message();
 					echo '<br />';
 					continue;
@@ -727,7 +727,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 							do_action( 'wp_import_insert_term', $t, $term, $post_id, $post );
 						} else {
 							printf( __( 'Failed to import %s %s', 'mantrabrain-starter-sites' ), esc_html($taxonomy), esc_html($term['name']) );
-							if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
+							if ( defined('MBSS_IMPORT_DEBUG') && MBSS_IMPORT_DEBUG )
 								echo ': ' . $t->get_error_message();
 							echo '<br />';
 							do_action( 'wp_import_insert_term_failed', $t, $term, $post_id, $post );
