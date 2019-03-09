@@ -77,7 +77,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 				$this->fetch_attachments = ( ! empty( $_POST['fetch_attachments'] ) && $this->allow_fetch_attachments() );
 				$this->id = (int) $_POST['import_id'];
 				$file = get_attached_file( $this->id );
-				set_time_limit(0);
+				set_time_limit(1500);
 				$this->import( $file );
 				break;
 		}
@@ -986,7 +986,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer {
 
 		// fetch the remote url and write it to the placeholder file
 		$remote_response = wp_safe_remote_get( $url, array(
-			'timeout'  => 300,
+			'timeout'  => 1500,
 			'stream'   => true,
 			'filename' => $upload['file'],
 		) );
