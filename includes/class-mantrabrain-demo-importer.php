@@ -148,19 +148,23 @@ class Mantrabrain_Demo_Importer {
 	public function enqueue_scripts() {
 		$screen      = get_current_screen();
 		$screen_id   = $screen ? $screen->id : '';
-		$suffix      = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix      = '';//defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$assets_path = mb_starter_sites()->plugin_url() . '/assets/';
 
 		// Register admin styles.
-		wp_register_style( 'mantrabrain-starter-sites', $assets_path . 'css/mantrabrain-starter-sites.css', array(), MANTRABRAIN_STARTER_SITES_VERSION );
+		wp_register_style( 'mantrabrain-jquery-confirm', $assets_path . 'css/jquery-confirm/jquery-confirm.min.css', array(), MANTRABRAIN_STARTER_SITES_VERSION );
+
+		// Register admin styles.
+		wp_register_style( 'mantrabrain-starter-sites', $assets_path . 'css/mantrabrain-starter-sites.css', array('mantrabrain-jquery-confirm'), MANTRABRAIN_STARTER_SITES_VERSION );
 
 		// Add RTL support for admin styles.
 		wp_style_add_data( 'mantrabrain-starter-sites', 'rtl', 'replace' );
 
 		// Register admin scripts.
+		wp_register_script( 'jquery-confirm', $assets_path . 'js/jquery-confirm/jquery-confirm' . $suffix . '.js', array( 'jquery' ), '3.3.0', true );
 		wp_register_script( 'jquery-tiptip', $assets_path . 'js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), '1.3', true );
 		wp_register_script( 'mantrabrain-demo-updates', $assets_path . 'js/admin/demo-updates' . $suffix . '.js', array( 'jquery', 'updates' ), MANTRABRAIN_STARTER_SITES_VERSION, true );
-		wp_register_script( 'mantrabrain-starter-sites', $assets_path . 'js/admin/demo-importer' . $suffix . '.js', array( 'jquery', 'jquery-tiptip', 'wp-backbone', 'wp-a11y', 'mantrabrain-demo-updates' ), MANTRABRAIN_STARTER_SITES_VERSION, true );
+		wp_register_script( 'mantrabrain-starter-sites', $assets_path . 'js/admin/demo-importer' . $suffix . '.js', array( 'jquery', 'jquery-confirm', 'jquery-tiptip', 'wp-backbone', 'wp-a11y', 'mantrabrain-demo-updates' ), MANTRABRAIN_STARTER_SITES_VERSION, true );
 
 		// Demo Importer appearance page.
 		if ( 'appearance_page_starter-sites' === $screen_id ) {
@@ -179,7 +183,7 @@ class Mantrabrain_Demo_Importer {
 					'livePreview'           => __( 'Live Preview', 'mantrabrain-starter-sites' ),
 					'livePreviewLabel'      => _x( 'Live Preview %s', 'demo', 'mantrabrain-starter-sites' ),
 					'imported'              => __( 'Imported!', 'mantrabrain-starter-sites' ),
-					'statusTextLink'        => '<a href="https://docs.mantrabrain.com/knowledgebase/demo-import-process-failed/" target="_blank">' . __( 'Try this solution!', 'mantrabrain-starter-sites' ) . '</a>',
+					'statusTextLink'        => '<a href="https://mantrabrain.com/docs/demo-import-failed-issue/" target="_blank">' . __( 'Try this solution!', 'mantrabrain-starter-sites' ) . '</a>',
 				),
 			) );
 			wp_localize_script( 'mantrabrain-starter-sites', '_demoImporterSettings', array(
@@ -190,7 +194,13 @@ class Mantrabrain_Demo_Importer {
 					'adminUrl'       => parse_url( self_admin_url(), PHP_URL_PATH ),
 					'suggestURI'     => apply_filters( 'mantrabrain_starter_sites_suggest_new', 'https://mantrabrain.com/contact/' ),
 					'confirmReset'   => __( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the reset wizard now?', 'mantrabrain-starter-sites' ),
-					'confirmImport'  => __( "Importing demo data will ensure that your site will look similar as theme demo. It makes you easy to modify the content instead of creating them from scratch. Also consider before importing theme demo: \n\n1. You need to import demo on fresh WordPress install to exactly replicate the theme demo. \n\n2. None of the posts, pages, attachments or any other data already existing in your site will be deleted or modified. \n\n3. Copyright images will get replaced with other placeholder images. \n\n4. It will take some time to import the theme demo.", 'mantrabrain-starter-sites' ),
+					'confirmImportTitle'   => __( 'Are you sure to import demo content?', 'mantrabrain-starter-sites' ),
+					'confirmImport'  => __( "Importing demo data will ensure that your site will look similar as theme demo. It makes you easy to modify the content instead of creating them from scratch. Also consider before importing theme demo:
+                    <ol><li> You need to import demo on fresh WordPress install to exactly replicate the theme demo. </li>
+                    <li>None of the posts, pages, attachments or any other data already existing in your site will be deleted or modified.</li>
+                    <li>Copyright images will get replaced with other placeholder images.</li> 
+                    <li>It will take some time to import the theme demo.</li></ol>
+                    ", 'mantrabrain-starter-sites' ),
 				),
 				'l10n' => array(
 					'search'              => __( 'Search Demos', 'mantrabrain-starter-sites' ),
@@ -539,7 +549,6 @@ class Mantrabrain_Demo_Importer {
 				'errorMessage' => __( 'No demo specified.', 'mantrabrain-starter-sites' ),
 			) );
 		}
-        set_time_limit(1500);
 
         $slug   = sanitize_key( wp_unslash( $_POST['slug'] ) );
 		$status = array(

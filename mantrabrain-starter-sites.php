@@ -34,6 +34,6 @@ if ( ! class_exists( 'Mantrabrain_Starter_Sites' ) ) {
 function mb_starter_sites() {
 	return Mantrabrain_Starter_Sites::instance();
 }
-
+ini_set('max_execution_time', 1500);
 // Global for backwards compatibility.
 $GLOBALS['mantrabrain-starter-sites'] = mb_starter_sites();
