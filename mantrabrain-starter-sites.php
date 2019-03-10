@@ -36,4 +36,5 @@ function mb_starter_sites() {
 }
 ini_set('max_execution_time', 1500);
 // Global for backwards compatibility.
+
 $GLOBALS['mantrabrain-starter-sites'] = mb_starter_sites();

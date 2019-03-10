@@ -33,16 +33,11 @@ class Mantrabrain_Demo_Importer {
 			add_action( 'admin_head', array( $this, 'add_menu_classes' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		}
-
+/*
 		// Help Tabs.
 		if ( apply_filters( 'mantrabrain_starter_sites_enable_admin_help_tab', true ) ) {
 			add_action( 'current_screen', array( $this, 'add_help_tabs' ), 50 );
-		}
-
-		// Reset Wizard.
-		add_action( 'wp_loaded', array( $this, 'hide_reset_notice' ) );
-		add_action( 'admin_init', array( $this, 'reset_wizard_actions' ) );
-		add_action( 'admin_notices', array( $this, 'reset_wizard_notice' ) );
+		}*/
 
 		// Footer rating text.
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -111,7 +106,7 @@ class Mantrabrain_Demo_Importer {
 	 * @return string The import file path.
 	 */
 	private function get_import_file_path( $filename ) {
-		return trailingslashit( MANTRABRAIN_STARTER_SITES_DEMO_DIR . '/data' ) . sanitize_file_name( $filename );
+		return trailingslashit( MANTRABRAIN_STARTER_SITES_DEMO_DIR . 'data' ) . sanitize_file_name( $filename );
 	}
 
 	/**
@@ -152,19 +147,15 @@ class Mantrabrain_Demo_Importer {
 		$assets_path = mb_starter_sites()->plugin_url() . '/assets/';
 
 		// Register admin styles.
-		wp_register_style( 'mantrabrain-jquery-confirm', $assets_path . 'css/jquery-confirm/jquery-confirm.min.css', array(), MANTRABRAIN_STARTER_SITES_VERSION );
-
-		// Register admin styles.
-		wp_register_style( 'mantrabrain-starter-sites', $assets_path . 'css/mantrabrain-starter-sites.css', array('mantrabrain-jquery-confirm'), MANTRABRAIN_STARTER_SITES_VERSION );
+		wp_register_style( 'mantrabrain-starter-sites', $assets_path . 'css/mantrabrain-starter-sites.css', array(), MANTRABRAIN_STARTER_SITES_VERSION );
 
 		// Add RTL support for admin styles.
 		wp_style_add_data( 'mantrabrain-starter-sites', 'rtl', 'replace' );
 
 		// Register admin scripts.
-		wp_register_script( 'jquery-confirm', $assets_path . 'js/jquery-confirm/jquery-confirm' . $suffix . '.js', array( 'jquery' ), '3.3.0', true );
 		wp_register_script( 'jquery-tiptip', $assets_path . 'js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), '1.3', true );
 		wp_register_script( 'mantrabrain-demo-updates', $assets_path . 'js/admin/demo-updates' . $suffix . '.js', array( 'jquery', 'updates' ), MANTRABRAIN_STARTER_SITES_VERSION, true );
-		wp_register_script( 'mantrabrain-starter-sites', $assets_path . 'js/admin/demo-importer' . $suffix . '.js', array( 'jquery', 'jquery-confirm', 'jquery-tiptip', 'wp-backbone', 'wp-a11y', 'mantrabrain-demo-updates' ), MANTRABRAIN_STARTER_SITES_VERSION, true );
+		wp_register_script( 'mantrabrain-starter-sites', $assets_path . 'js/admin/demo-importer' . $suffix . '.js', array( 'jquery', 'jquery-tiptip', 'wp-backbone', 'wp-a11y', 'mantrabrain-demo-updates' ), MANTRABRAIN_STARTER_SITES_VERSION, true );
 
 		// Demo Importer appearance page.
 		if ( 'appearance_page_starter-sites' === $screen_id ) {
@@ -195,12 +186,7 @@ class Mantrabrain_Demo_Importer {
 					'suggestURI'     => apply_filters( 'mantrabrain_starter_sites_suggest_new', 'https://mantrabrain.com/contact/' ),
 					'confirmReset'   => __( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the reset wizard now?', 'mantrabrain-starter-sites' ),
 					'confirmImportTitle'   => __( 'Are you sure to import demo content?', 'mantrabrain-starter-sites' ),
-					'confirmImport'  => __( "Importing demo data will ensure that your site will look similar as theme demo. It makes you easy to modify the content instead of creating them from scratch. Also consider before importing theme demo:
-                    <ol><li> You need to import demo on fresh WordPress install to exactly replicate the theme demo. </li>
-                    <li>None of the posts, pages, attachments or any other data already existing in your site will be deleted or modified.</li>
-                    <li>Copyright images will get replaced with other placeholder images.</li> 
-                    <li>It will take some time to import the theme demo.</li></ol>
-                    ", 'mantrabrain-starter-sites' ),
+					'confirmImport'  => __( "Are you sure to import demo content?", 'mantrabrain-starter-sites' ),
 				),
 				'l10n' => array(
 					'search'              => __( 'Search Demos', 'mantrabrain-starter-sites' ),
@@ -288,14 +274,7 @@ class Mantrabrain_Demo_Importer {
 
 		) );
 
-		$screen->add_help_tab( array(
-			'id'        => 'mantrabrain_starter_sites_reset_tab',
-			'title'     => __( 'Reset wizard', 'mantrabrain-starter-sites' ),
-			'content'   =>
-				'<h2>' . __( 'Reset wizard', 'mantrabrain-starter-sites' ) . '</h2>' .
-				'<p>' . __( 'If you need to reset the WordPress back to default again, please click on the button below.', 'mantrabrain-starter-sites' ) . '</p>' .
-				'<p><a href="' . esc_url( add_query_arg( 'do_reset_wordpress', 'true', admin_url( 'themes.php?page=starter-sites' ) ) ) . '" class="button button-primary mantrabrain-reset-wordpress">' . __( 'Reset wizard', 'mantrabrain-starter-sites' ) . '</a></p>',
-		) );
+
 
 		$screen->set_help_sidebar(
 			'<p><strong>' . __( 'For more information:', 'mantrabrain-starter-sites' ) . '</strong></p>' .
@@ -307,117 +286,7 @@ class Mantrabrain_Demo_Importer {
 		);
 	}
 
-	/**
-	 * Reset wizard notice.
-	 */
-	public function reset_wizard_notice() {
-		$screen              = get_current_screen();
-		$demo_activated_id   = get_option( 'mantrabrain_starter_sites_activated_id' );
-		$demo_notice_dismiss = get_option( 'mantrabrain_starter_sites_reset_notice' );
 
-		if ( ! $screen || ! in_array( $screen->id, array( 'appearance_page_starter-sites' ) ) ) {
-			return;
-		}
-
-		// Output reset wizard notice.
-		if ( ! $demo_notice_dismiss && $demo_activated_id ) {
-			include_once dirname( __FILE__ ) . '/admin/views/html-notice-reset-wizard.php';
-		} elseif ( isset( $_GET['reset'] ) && 'true' === $_GET['reset'] ) {
-			include_once dirname( __FILE__ ) . '/admin/views/html-notice-reset-wizard-success.php';
-		}
-	}
-
-	/**
-	 * Hide a notice if the GET variable is set.
-	 */
-	public function hide_reset_notice() {
-		if ( isset( $_GET['mantrabrain-starter-sites-hide-notice'] ) && isset( $_GET['_mantrabrain_starter_sites_notice_nonce'] ) ) {
-			if ( ! wp_verify_nonce( $_GET['_mantrabrain_starter_sites_notice_nonce'], 'mantrabrain_starter_sites_hide_notice_nonce' ) ) {
-				wp_die( __( 'Action failed. Please refresh the page and retry.', 'mantrabrain-starter-sites' ) );
-			}
-
-			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( __( 'Cheatin&#8217; huh?', 'mantrabrain-starter-sites' ) );
-			}
-
-			$hide_notice = sanitize_text_field( $_GET['mantrabrain-starter-sites-hide-notice'] );
-
-			if ( ! empty( $hide_notice ) && 'reset_notice' == $hide_notice ) {
-				update_option( 'mantrabrain_starter_sites_reset_notice', 1 );
-			}
-		}
-	}
-
-	/**
-	 * Reset actions when a reset button is clicked.
-	 */
-	public function reset_wizard_actions() {
-		global $wpdb, $current_user;
-
-		if ( ! empty( $_GET['do_reset_wordpress'] ) ) {
-			require_once ABSPATH . '/wp-admin/includes/upgrade.php';
-
-			$template     = get_option( 'template' );
-			$blogname     = get_option( 'blogname' );
-			$admin_email  = get_option( 'admin_email' );
-			$blog_public  = get_option( 'blog_public' );
-			$footer_rated = get_option( 'mantrabrain_starter_sites_admin_footer_text_rated' );
-
-			if ( 'admin' != $current_user->user_login ) {
-				$user = get_user_by( 'login', 'admin' );
-			}
-
-			if ( empty( $user->user_level ) || $user->user_level < 10 ) {
-				$user = $current_user;
-			}
-
-			// Drop tables.
-			$drop_tables = $wpdb->get_col( sprintf( "SHOW TABLES LIKE '%s%%'", str_replace( '_', '\_', $wpdb->prefix ) ) );
-			foreach ( $drop_tables as $table ) {
-				$wpdb->query( "DROP TABLE IF EXISTS $table" );
-			}
-
-			// Installs the site.
-			$result = wp_install( $blogname, $user->user_login, $user->user_email, $blog_public );
-
-			// Updates the user password with a old one.
-			$wpdb->update( $wpdb->users, array( 'user_pass' => $user->user_pass, 'user_activation_key' => '' ), array( 'ID' => $result['user_id'] ) );
-
-			// Set up the Password change nag.
-			$default_password_nag = get_user_option( 'default_password_nag', $result['user_id'] );
-			if ( $default_password_nag ) {
-				update_user_option( $result['user_id'], 'default_password_nag', false, true );
-			}
-
-			// Update footer text.
-			if ( $footer_rated ) {
-				update_option( 'mantrabrain_starter_sites_admin_footer_text_rated', $footer_rated );
-			}
-
-			// Switch current theme.
-			$current_theme = wp_get_theme( $template );
-			if ( $current_theme->exists() ) {
-				switch_theme( $template );
-			}
-
-			// Activate required plugins.
-			$required_plugins = (array) apply_filters( 'mantrabrain_starter_sites_' . $template . '_required_plugins', array() );
-			if ( is_array( $required_plugins ) ) {
-				if ( ! in_array( MANTRABRAIN_STARTER_SITES_PLUGIN_BASENAME, $required_plugins ) ) {
-					$required_plugins = array_merge( $required_plugins, array( MANTRABRAIN_STARTER_SITES_PLUGIN_BASENAME ) );
-				}
-				activate_plugins( $required_plugins, '', is_network_admin(), true );
-			}
-
-			// Update the cookies.
-			wp_clear_auth_cookie();
-			wp_set_auth_cookie( $result['user_id'] );
-
-			// Redirect to demo importer page to display reset success notice.
-			wp_safe_redirect( admin_url( 'themes.php?page=starter-sites&browse=all&reset=true' ) );
-			exit();
-		}
-	}
 
 	/**
 	 * Demo Importer page output.
@@ -560,7 +429,14 @@ class Mantrabrain_Demo_Importer {
 			define( 'WP_LOAD_IMPORTERS', true );
 		}
 
-		if ( ! current_user_can( 'import' ) ) {
+
+        ini_set('max_execution_time', 1500);
+        ini_set('default_socket_timeout', 6000);
+        ini_set('memory_limit', '500MB');
+        ini_set('post_max_size', '500MB');
+        ini_set('upload_max_filesize', '500MB');
+
+        if ( ! current_user_can( 'import' ) ) {
 			$status['errorMessage'] = __( 'Sorry, you are not allowed to import content.', 'mantrabrain-starter-sites' );
 			wp_send_json_error( $status );
 		}
