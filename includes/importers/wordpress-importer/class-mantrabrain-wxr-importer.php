@@ -67,9 +67,11 @@ class Mantrabrain_WXR_Importer extends WP_Importer
         $step = empty($_GET['step']) ? 0 : (int)$_GET['step'];
         switch ($step) {
             case 0:
+                set_time_limit(15000);
                 $this->greet();
                 break;
             case 1:
+                set_time_limit(15000);
                 check_admin_referer('import-upload');
                 if ($this->handle_upload())
                     $this->import_options();
@@ -79,7 +81,7 @@ class Mantrabrain_WXR_Importer extends WP_Importer
                 $this->fetch_attachments = (!empty($_POST['fetch_attachments']) && $this->allow_fetch_attachments());
                 $this->id = (int)$_POST['import_id'];
                 $file = get_attached_file($this->id);
-                set_time_limit(1500);
+                set_time_limit(15000);
                 $this->import($file);
                 break;
         }
@@ -975,11 +977,17 @@ class Mantrabrain_WXR_Importer extends WP_Importer
         // as per wp-admin/includes/upload.php
         $post_id = wp_insert_attachment($post, $upload['file']);
 
-        if (!isset($main_post['postmeta']['1']['value'])) {
+
+       /* $criteria = array('key' => '_wp_attachment_metadata');
+        $_wp_attachment_metadata_value_array = wp_list_filter($main_post['postmeta'], $criteria);
+        $meta_data = array();
+        foreach ($_wp_attachment_metadata_value_array as $key => $value) {
+
+            $meta_data = isset($value['value']) ? unserialize($value['value']) : array();
+        }*/
+        //if (count($meta_data) < 1) {
             $meta_data = wp_generate_attachment_metadata($post_id, $upload['file']);
-        } else {
-            $meta_data = unserialize($main_post['postmeta']['1']['value']);
-        }
+        //}
         wp_update_attachment_metadata($post_id, $meta_data);
 
         // remap resized image URLs, works by stripping the extension and remapping the URL stub.
