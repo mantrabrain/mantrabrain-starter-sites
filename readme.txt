@@ -3,7 +3,7 @@ Contributors: Mantrabrain
 Tags: mantrabrain, starter sites, demo import
 Requires at least: 4.7
 Tested up to: 5.0.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -33,5 +33,7 @@ The manual installation method involves downloading our demo importer plugin and
 
 == Changelog ==
 
+= 1.0.1 - 2019/03/10 =
+* Import issue fixed
 = 1.0.0 - 2019/02/03 =
 * Initial Release
