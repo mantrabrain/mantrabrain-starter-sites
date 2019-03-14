@@ -430,11 +430,6 @@ class Mantrabrain_Demo_Importer {
 		}
 
 
-        ini_set('max_execution_time', 1500);
-        ini_set('default_socket_timeout', 6000);
-        ini_set('memory_limit', '500MB');
-        ini_set('post_max_size', '500MB');
-        ini_set('upload_max_filesize', '500MB');
 
         if ( ! current_user_can( 'import' ) ) {
 			$status['errorMessage'] = __( 'Sorry, you are not allowed to import content.', 'mantrabrain-starter-sites' );
