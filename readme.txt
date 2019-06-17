@@ -1,4 +1,4 @@
-=== Mantrabrain Starter Sites ===
+=== Mantrabrain Starter Sites | Mantrabrain Theme Demo Importer ===
 Contributors: Mantrabrain
 Tags: mantrabrain, starter sites, demo import
 Requires at least: 4.7
@@ -7,12 +7,16 @@ Stable tag: 1.0.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Starter sites for Mantra Brain Themes
+Starter sites / Demo importer for Mantra Brain Themes
 
 == Description ==
-Starter sites for Mantra Brain Themes
+Starter sites / Demo importer for Mantra Brain Themes
 
 Get [free support](https://mantrabrain.com/support-forum/)
+
+= Mantrabrain Starter Sites/Demo Importer for Mantrabrain theme video overview: =
+
+[youtube https://www.youtube.com/watch?v=io3vjFUFE2U]
 
 == Installation ==
 
