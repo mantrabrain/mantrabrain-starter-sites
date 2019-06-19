@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Mantrabrain Starter Sites
  * Description: Starter sites for Mantra Brain Themes
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Mantrabrain
  * Author URI: https://mantrabrain.com
  * License: GPLv3 or later
