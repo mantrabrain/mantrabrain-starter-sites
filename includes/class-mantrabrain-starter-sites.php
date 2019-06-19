@@ -121,7 +121,9 @@ final class Mantrabrain_Starter_Sites {
 	 */
 	private function get_core_supported_themes() {
 		$core_themes = array(
-		    'mantranews'
+		    'mantranews',
+            'agency-ecommerce',
+            'november-zero'
         );
 
 		// Check for official core themes pro version.
