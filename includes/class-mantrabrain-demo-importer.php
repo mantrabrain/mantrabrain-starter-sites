@@ -254,7 +254,7 @@ class Mantrabrain_Demo_Importer {
 				'<h2>' . __( 'Help &amp; Support', 'mantrabrain-starter-sites' ) . '</h2>' .
 				'<p>' . sprintf(
 					__( 'Should you need help understanding, using, or extending Mantrabrain Starter Sites, <a href="%s">please read our documentation</a>. You will find all kinds of resources including snippets, tutorials and much more.' , 'mantrabrain-starter-sites' ),
-					'https://mantrabrain.com/docs/mantrabrain-starter-sites/'
+					'https://mantrabrain.com/docs/'
 				) . '</p>' .
 				'<p>' . sprintf(
 					__( 'For further assistance with Mantrabrain Starter Sites core you can use the <a href="%1$s">community forum</a>. If you need help with premium themes sold by Mantrabrain, please <a href="%2$s">use our free support forum</a>.', 'mantrabrain-starter-sites' ),

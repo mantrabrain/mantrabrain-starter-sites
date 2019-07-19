@@ -262,7 +262,7 @@ final class Mantrabrain_Starter_Sites
     {
         if (MANTRABRAIN_STARTER_SITES_PLUGIN_BASENAME === $plugin_file) {
             $new_plugin_meta = array(
-                'docs' => '<a href="' . esc_url(apply_filters('mantrabrain_starter_sites_docs_url', 'https://mantrabrain.com/docs/mantrabrain-starter-sites/')) . '" title="' . esc_attr(__('View Demo Importer Documentation', 'mantrabrain-starter-sites')) . '">' . __('Docs', 'mantrabrain-starter-sites') . '</a>',
+                'docs' => '<a href="' . esc_url(apply_filters('mantrabrain_starter_sites_docs_url', 'https://mantrabrain.com/docs/')) . '" title="' . esc_attr(__('View Demo Importer Documentation', 'mantrabrain-starter-sites')) . '">' . __('Docs', 'mantrabrain-starter-sites') . '</a>',
                 'support' => '<a href="' . esc_url(apply_filters('mantrabrain_starter_sites_support_url', 'https://mantrabrain.com/support-forum/')) . '" title="' . esc_attr(__('Visit Free Customer Support Forum', 'mantrabrain-starter-sites')) . '">' . __('Free Support', 'mantrabrain-starter-sites') . '</a>',
             );
 
