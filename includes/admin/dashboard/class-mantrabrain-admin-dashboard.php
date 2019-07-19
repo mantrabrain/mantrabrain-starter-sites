@@ -47,7 +47,7 @@ if (!class_exists('Mantrabrain_Admin_Dashboard')) {
         public static function dashboard_widget_setup()
         {
             $widget_key = 'mantrabrain_dashboard_blog_news';
-            wp_add_dashboard_widget('mantrabrain_dashboard_blog_news', __('Latest News From Mantra Brain Blog', 'mantrabrain-starter-sites'), 'Mantrabrain_Admin_Dashboard::dashboard_blog_news');
+            wp_add_dashboard_widget('mantrabrain_dashboard_blog_news', __('Latest News From MantraBrain Blog', 'mantrabrain-starter-sites'), 'Mantrabrain_Admin_Dashboard::dashboard_blog_news');
 
             global $wp_meta_boxes;
 
