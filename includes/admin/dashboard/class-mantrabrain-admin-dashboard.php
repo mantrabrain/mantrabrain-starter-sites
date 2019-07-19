@@ -69,7 +69,7 @@ if (!class_exists('Mantrabrain_Admin_Dashboard')) {
          */
         public static function dashboard_blog_news()
         {
-            $args = array('show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 3);
+            $args = array('show_author' => 0, 'show_date' => 1, 'show_summary' => 0, 'items' => 10);
             $feed = static::$_blog_feed;
             wp_widget_rss_output($feed, $args);
             $urls = array(
