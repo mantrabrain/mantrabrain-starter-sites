@@ -23,6 +23,8 @@ class Mantrabrain_Demo_Importer
 
     public $current_theme;
 
+    public $theme_demo_data_uris;
+
     /**
      * Constructor.
      */
