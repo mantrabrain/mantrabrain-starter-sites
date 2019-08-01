@@ -416,7 +416,7 @@ class Mantrabrain_Demo_Importer
 
         $packages = isset($this->demo_packages['demos']) ? $this->demo_packages['demos'] : array();
 
-        $demo_data = $packages[$slug];
+        $demo_data = isset($packages[$slug]) ? $packages[$slug] : '';
 
         $status['demoName'] = $demo_data['title'];
 
