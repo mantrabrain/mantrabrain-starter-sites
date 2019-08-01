@@ -36,6 +36,8 @@ The manual installation method involves downloading our demo importer plugin and
 
 
 == Changelog ==
+= 1.0.6 - 2019/08/01 =
+* Fixed - Frontend loading issue fixed
 = 1.0.5 - 2019/08/01 =
 * Fixed - Minor issue fixes
 = 1.0.4 - 2019/07/19 =
