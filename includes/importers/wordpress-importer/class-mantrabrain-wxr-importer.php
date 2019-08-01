@@ -128,13 +128,6 @@ class Mantrabrain_WXR_Importer extends WP_Importer
      */
     function import_start($file)
     {
-        if (!is_file($file)) {
-            echo '<p><strong>' . __('Sorry, there has been an error.', 'mantrabrain-starter-sites') . '</strong><br />';
-            echo __('The file does not exist, please try again.', 'mantrabrain-starter-sites') . '</p>';
-            $this->footer();
-            die();
-        }
-
         $import_data = $this->parse($file);
 
         if (is_wp_error($import_data)) {
@@ -978,15 +971,15 @@ class Mantrabrain_WXR_Importer extends WP_Importer
         $post_id = wp_insert_attachment($post, $upload['file']);
 
 
-       /* $criteria = array('key' => '_wp_attachment_metadata');
-        $_wp_attachment_metadata_value_array = wp_list_filter($main_post['postmeta'], $criteria);
-        $meta_data = array();
-        foreach ($_wp_attachment_metadata_value_array as $key => $value) {
+        /* $criteria = array('key' => '_wp_attachment_metadata');
+         $_wp_attachment_metadata_value_array = wp_list_filter($main_post['postmeta'], $criteria);
+         $meta_data = array();
+         foreach ($_wp_attachment_metadata_value_array as $key => $value) {
 
-            $meta_data = isset($value['value']) ? unserialize($value['value']) : array();
-        }*/
+             $meta_data = isset($value['value']) ? unserialize($value['value']) : array();
+         }*/
         //if (count($meta_data) < 1) {
-            $meta_data = wp_generate_attachment_metadata($post_id, $upload['file']);
+        $meta_data = wp_generate_attachment_metadata($post_id, $upload['file']);
         //}
         wp_update_attachment_metadata($post_id, $meta_data);
 

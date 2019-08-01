@@ -111,6 +111,8 @@ final class Mantrabrain_Starter_Sites
         // Register activation hook.
         register_activation_hook(MANTRABRAIN_STARTER_SITES_PLUGIN_FILE, array($this, 'install'));
 
+        include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/class-mantrabrain-demo-api.php';
+
         // Check with Official Mantrabrain theme is installed.
         if (in_array(get_option('template'), $this->get_core_supported_themes(), true)) {
             $this->includes();
@@ -129,19 +131,8 @@ final class Mantrabrain_Starter_Sites
      */
     private function get_core_supported_themes()
     {
-        $core_themes = array(
-            'mantranews',
-            'agency-ecommerce',
-            'november-zero'
-        );
 
-        // Check for official core themes pro version.
-        $pro_themes = $core_themes; // If there is no pro theme, please remove theme from this array
-        if (!empty($pro_themes)) {
-            $pro_themes = preg_replace('/$/', '-pro', $pro_themes);
-        }
-
-        return array_merge($core_themes, $pro_themes);
+        return Mantrabrain_Demo_API::get_valid_themes();
     }
 
     /**
@@ -149,14 +140,9 @@ final class Mantrabrain_Starter_Sites
      */
     private function includes()
     {
+
         include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/class-mantrabrain-demo-importer.php';
         include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/functions.php';
-
-        // Backward compatibility for demo packages config.
-        if (file_exists(MANTRABRAIN_STARTER_SITES_DEMO_DIR . 'mantrabrain-demo-config.php')) {
-            include_once MANTRABRAIN_STARTER_SITES_DEMO_DIR . 'mantrabrain-demo-config.php';
-        }
-
 
         // Admin Dashboard
         if (is_admin()) {

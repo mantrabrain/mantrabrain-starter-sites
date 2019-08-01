@@ -12,8 +12,6 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 global $wpdb;
 
-delete_transient( 'mantrabrain_starter_sites_packages' );
-
 /*
  * Only remove ALL demo importer data if MANTRABRAIN_STARTER_SITES_REMOVE_ALL_DATA constant is set to true in user's
  * wp-config.php. This is to prevent data loss when deleting the plugin from the backend

@@ -23,18 +23,18 @@ defined( 'ABSPATH' ) || exit;
 			<div class="filter-count">
 				<span class="count theme-count demo-count"></span>
 			</div>
-			<?php if ( ! empty( $this->demo_packages->categories ) ) : ?>
+			<?php if ( isset( $this->demo_packages['categories']) ) : ?>
 				<ul class="filter-links categories">
-					<?php foreach ( $this->demo_packages->categories as $slug => $label ) : ?>
+					<?php foreach ( $this->demo_packages['categories']as $slug => $label ) : ?>
 						<li><a href="#" data-sort="<?php echo esc_attr( $slug ); ?>" class="category-tab"><?php echo esc_html( $label ); ?></a></li>
 					<?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 		</div>
 		<div class="filter-section right">
-			<?php if ( ! empty( $this->demo_packages->pagebuilders ) ) : ?>
+			<?php if ( isset( $this->demo_packages['pagebuilders']) ) : ?>
 				<ul class="filter-links pagebuilders">
-					<?php foreach ( $this->demo_packages->pagebuilders as $slug => $label ) : ?>
+					<?php foreach ( $this->demo_packages['pagebuilders'] as $slug => $label ) : ?>
 						<?php if ( 'default' !== $slug ) : ?>
 							<li><a href="#" data-type="<?php echo esc_attr( $slug ); ?>" class="pagebuilder-tab"><?php echo esc_html( $label ); ?></a></li>
 						<?php else: ?>
