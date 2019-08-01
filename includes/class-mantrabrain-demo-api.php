@@ -7,18 +7,6 @@ class Mantrabrain_Demo_API
     private static $api_uri = 'https://raw.githubusercontent.com/mantrabrain/mantrabrain-demo-pack/master/';
 
 
-    private static $config_endpoint = 'configuration.json';
-
-    private static function get_endpoint($param = '')
-    {
-        if (!empty($param) && isset(self::$$param)) {
-
-            return self::$api_uri . self::$$param;
-        }
-
-    }
-
-
     private static function file_data_array($url = '')
     {
         $response = wp_remote_head($url);
@@ -41,9 +29,7 @@ class Mantrabrain_Demo_API
     public static function get_valid_themes()
     {
 
-        $config = self::file_data_array(self::get_endpoint("config_endpoint"));
-
-        $supported_themes = isset($config['supported_themes']) ? $config['supported_themes'] : array();
+        $supported_themes = mantrabrain_starter_sites_supported_themes();
 
         $mantrabrain_supported_theme_slug = array_keys($supported_themes);
 
@@ -54,11 +40,18 @@ class Mantrabrain_Demo_API
 
     public static function get_theme_demo_configuration($theme_slug = '')
     {
+
         $current_template = empty($theme_slug) ? get_option('template') : $theme_slug;
 
-        $config = self::file_data_array(self::get_endpoint("config_endpoint"));
+        $demo_config_array = get_transient('mantrabrain_get_theme_demo_configuration');
 
-        $supported_demos_config = isset($config['demo_directory_mapping']) ? $config['demo_directory_mapping'] : array();
+        if (is_array($demo_config_array) && $demo_config_array && (isset($demo_config_array['slug']) && $current_template === $demo_config_array['slug'])) {
+
+            return $demo_config_array;
+
+        }
+
+        $supported_demos_config = mantrabrain_starter_sites_demo_directory_mapping();
 
         $config_file_path_for_template = isset($supported_demos_config[$current_template]) ? self::$api_uri . $supported_demos_config[$current_template] . '/' . $supported_demos_config[$current_template] . '.json' : '';
 
@@ -68,6 +61,7 @@ class Mantrabrain_Demo_API
 
             $demo_config_array = self::file_data_array($config_file_path_for_template);
         }
+        set_transient('mantrabrain_get_theme_demo_configuration', $demo_config_array, DAY_IN_SECONDS);
 
         return $demo_config_array;
     }
@@ -77,9 +71,7 @@ class Mantrabrain_Demo_API
 
         $current_template = empty($theme_slug) ? get_option('template') : $theme_slug;
 
-        $config = self::file_data_array(self::get_endpoint("config_endpoint"));
-
-        $supported_demos_config = isset($config['demo_directory_mapping']) ? $config['demo_directory_mapping'] : array();
+        $supported_demos_config = mantrabrain_starter_sites_demo_directory_mapping();
 
         $demo_directory_path = isset($supported_demos_config[$current_template]) ? self::$api_uri . $supported_demos_config[$current_template] . '/' : '';
 
