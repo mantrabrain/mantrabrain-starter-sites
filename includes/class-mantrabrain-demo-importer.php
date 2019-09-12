@@ -289,6 +289,8 @@ class Mantrabrain_Demo_Importer
 
         $is_pro_theme_demo = strpos($current_template, '-pro') !== false;
 
+        $is_pro_theme_demo = apply_filters('mantrabrain_starter_sites_pro_demo_import', $is_pro_theme_demo);
+
         $demo_activated_id = get_option('mantrabrain_starter_sites_activated_id');
 
         $available_packages = $this->demo_packages;
