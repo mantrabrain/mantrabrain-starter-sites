@@ -2,8 +2,8 @@
 Contributors: Mantrabrain
 Tags: mantrabrain, starter sites, demo import
 Requires at least: 4.7
-Tested up to: 5.2.2
-Stable tag: 1.0.6
+Tested up to: 5.2.3
+Stable tag: 1.0.7
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,8 @@ The manual installation method involves downloading our demo importer plugin and
 
 
 == Changelog ==
+= 1.0.7 - 2019/09/12 =
+* Fixed - Agecy ecommerce addons import updated
 = 1.0.6 - 2019/08/01 =
 * Fixed - Frontend loading issue fixed
 = 1.0.5 - 2019/08/01 =
