@@ -27,7 +27,7 @@ class Mantrabrain_Widget_Importer {
 	public static function import( $import_file, $demo_id, $demo_data ) {
 		global $wp_registered_sidebars;
 
-		$data = json_decode( file_get_contents( $import_file ) );
+		$data = json_decode( mantrabrain_file_get_contents( $import_file ) );
 
 		// Have valid data? If no data or could not decode.
 		if ( empty( $data ) || ! is_object( $data ) ) {

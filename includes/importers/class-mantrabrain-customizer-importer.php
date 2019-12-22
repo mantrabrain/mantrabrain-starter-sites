@@ -29,7 +29,7 @@ class Mantrabrain_Customizer_Importer {
 	public static function import( $import_file, $demo_id, $demo_data ) {
 		global $wp_customize;
 
-		$data = maybe_unserialize( file_get_contents( $import_file ) );
+		$data = maybe_unserialize( mantrabrain_file_get_contents( $import_file ) );
 
 		// Data checks.
 		if ( ! is_array( $data ) && ( ! isset( $data['template'] ) || ! isset( $data['mods'] ) ) ) {

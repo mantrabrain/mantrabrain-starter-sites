@@ -18,7 +18,7 @@ class Mantrabrain_Demo_API
             return array();
         }
 
-        $file_data = file_get_contents($url);
+        $file_data = mantrabrain_file_get_contents($url);
 
         $file_data_array = json_decode($file_data, true);
 
