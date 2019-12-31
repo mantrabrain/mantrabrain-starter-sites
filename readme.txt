@@ -1,9 +1,9 @@
-=== Mantrabrain Starter Sites | Mantrabrain Theme Demo Importer ===
+=== Mantra Brain Starter Sites | Mantrabrain Theme Demo Importer ===
 Contributors: Mantrabrain
 Tags: mantrabrain, starter sites, demo import
 Requires at least: 4.7
-Tested up to: 5.3
-Stable tag: 1.0.8
+Tested up to: 5.3.2
+Stable tag: 1.0.9
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,9 @@ The manual installation method involves downloading our demo importer plugin and
 
 
 == Changelog ==
+= 1.0.9 - 2019/12/31 =
+* Fixed - Version tested
+* Added - Yatri Theme Support
 = 1.0.8 - 2019/12/10 =
 * Fixed - Version tested
 = 1.0.7 - 2019/09/12 =
