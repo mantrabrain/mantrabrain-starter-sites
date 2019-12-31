@@ -113,8 +113,9 @@ final class Mantrabrain_Starter_Sites
             // Register activation hook.
             register_activation_hook(MANTRABRAIN_STARTER_SITES_PLUGIN_FILE, array($this, 'install'));
 
-            include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/class-mantrabrain-demo-api.php';
             include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/theme-mapping.php';
+            include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/class-mantrabrain-demo-api.php';
+
 
             // Check with Official Mantrabrain theme is installed.
             if (in_array(get_option('template'), $this->get_core_supported_themes(), true)) {
