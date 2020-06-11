@@ -12,7 +12,7 @@ if (!function_exists('mantrabrain_starter_sites_supported_themes')) {
             'november-zero' => 'November Zero',
             'november-zero-pro' => 'November Zero Pro',
             'agency-ecommerce' => 'Agency Ecommerce',
-            'yatri' => 'Yatri',
+            'magazinenp' => 'MagazineNP',
         ));
     }
 }
@@ -29,7 +29,7 @@ if (!function_exists('mantrabrain_starter_sites_demo_directory_mapping')) {
             'november-zero' => 'november-zero',
             'november-zero-pro' => 'november-zero',
             'agency-ecommerce' => 'agency-ecommerce',
-            'yatri' => 'yatri',
+            'magazinenp' => 'magazinenp',
         ));
 
 
