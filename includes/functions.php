@@ -155,7 +155,7 @@ add_action('wp_ajax_install-required-plugin', 'mantrabrain_ajax_install_required
 /**
  * Get an attachment ID from the filename.
  *
- * @param  string $filename
+ * @param string $filename
  * @return int Attachment ID on success, 0 on failure
  */
 function mantrabrain_get_attachment_id($filename)
@@ -409,6 +409,111 @@ function mantrabrain_print_admin_notice_templates()
     <?php
 }
 
+add_action('wp_ajax_install_recommanded', 'mantrabrain_starter_sites_install_demo_wise_plugins');
+
+function mantrabrain_starter_sites_install_demo_wise_plugins()
+{
+    check_ajax_referer('mantrabrain_starter_sites_install_recommanded_plugin_nonce', 'security');
+
+    $all_plugins = isset($_POST['demowise_plugins']) ? $_POST['demowise_plugins'] : array();
+
+    $installation_details = array(
+        'total_plugins' => count($all_plugins),
+        'plugin' => array(),
+    );
+
+    include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+    include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+
+    foreach ($all_plugins as $plugin_slug=>$plugin_data) {
+
+        $slug = $plugin_slug;
+
+        $installation_details['plugin'][$slug] = false;
+
+        $plugin = $slug . '/' . $slug . '.php';
+
+        if (current_user_can('install_plugins')) {
+
+            if (is_plugin_active_for_network($plugin) || is_plugin_active($plugin)) {
+                // Plugin is activated
+                $installation_details['plugin'][$slug] = 'active';
+            }
+
+            if (file_exists(WP_PLUGIN_DIR . '/' . $slug)) {
+
+                $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+
+                $status['plugin'] = $plugin;
+
+                $status['pluginName'] = $plugin_data['Name'];
+
+                if (current_user_can('activate_plugin', $plugin) && is_plugin_inactive($plugin)) {
+
+                    $result = activate_plugin($plugin);
+
+                    if (!is_wp_error($result)) {
+
+                        $installation_details['plugin'][$slug] = 'active';
+
+                    }
+                } else if (is_plugin_active($plugin)) {
+
+                    $installation_details['plugin'][$slug] = 'active';
+                }
+
+            } else {
+
+                $api = plugins_api(
+                    'plugin_information',
+                    array(
+                        'slug' => sanitize_key(wp_unslash($slug)),
+                        'fields' => array(
+                            'sections' => false,
+                        ),
+                    )
+                );
+
+                if (!is_wp_error($api)) {
+
+                    $status['pluginName'] = $api->name;
+
+                    $skin = new WP_Ajax_Upgrader_Skin();
+
+                    $upgrader = new Plugin_Upgrader($skin);
+
+                    $result = $upgrader->install($api->download_link);
+
+                    if (!is_wp_error($result) && !is_wp_error($skin->result) && !is_null($result)) {
+
+                        $install_status = install_plugin_install_status($api);
+
+                        if (!is_wp_error($install_status)) {
+
+                            $installation_details['plugin'][$slug] = 'installed';
+
+                            if (current_user_can('activate_plugin', $install_status['file']) && is_plugin_inactive($install_status['file'])) {
+
+                                $result = activate_plugin($install_status['file']);
+
+                                if (!is_wp_error($result)) {
+
+                                    $installation_details['plugin'][$slug] = 'active';
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+    wp_send_json($installation_details);
+}
+
+
 function mantrabrain_file_get_contents($file)
 {
 
@@ -418,7 +523,7 @@ function mantrabrain_file_get_contents($file)
 
         $response = wp_remote_get($file);
 
-        $response_data =  wp_remote_retrieve_body( $response );
+        $response_data = wp_remote_retrieve_body($response);
     }
     return $response_data;
 }

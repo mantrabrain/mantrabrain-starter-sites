@@ -95,13 +95,13 @@ defined( 'ABSPATH' ) || exit;
 				<# if ( data.isPro ) { #>
 					<a class="button button-primary purchase-now" href="{{ data.homepage }}" target="_blank"><?php _e( 'Buy Now', 'mantrabrain-starter-sites' ); ?></a>
 				<# } else if ( data.requiredTheme || data.requiredPlugins ) { #>
-					<button class="button button-primary preview install-demo-preview"><?php _e( 'Import', 'mantrabrain-starter-sites' ); ?></button>
+					<button data-required-plugins="{{JSON.stringify(data.required_plugins)}}" class="button button-primary preview install-demo-preview"><?php _e( 'Import', 'mantrabrain-starter-sites' ); ?></button>
 				<# } else { #>
 					<?php
 					/* translators: %s: Demo name */
 					$aria_label = sprintf( _x( 'Import %s', 'demo', 'mantrabrain-starter-sites' ), '{{ data.name }}' );
 					?>
-					<a class="button button-primary hide-if-no-js demo-import" href="#" data-name="{{ data.name }}" data-slug="{{ data.id }}" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Import', 'mantrabrain-starter-sites' ); ?></a>
+					<a data-required-plugins="{{JSON.stringify(data.required_plugins)}}"  class="button button-primary hide-if-no-js demo-import" href="#" data-name="{{ data.name }}" data-slug="{{ data.id }}" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Import', 'mantrabrain-starter-sites' ); ?></a>
 				<# } #>
 				<button class="button preview install-demo-preview"><?php _e( 'Preview', 'mantrabrain-starter-sites' ); ?></button>
 			<# } #>

@@ -169,6 +169,8 @@ class Mantrabrain_Demo_Importer
                     'confirmReset' => __('It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the reset wizard now?', 'mantrabrain-starter-sites'),
                     'confirmImportTitle' => __('Are you sure to import demo content?', 'mantrabrain-starter-sites'),
                     'confirmImport' => __("Are you sure to import demo content?", 'mantrabrain-starter-sites'),
+                    'install_recommanded_plugin' => 'install_recommanded',
+                    'install_recommanded_plugin_nonce' => wp_create_nonce('mantrabrain_starter_sites_install_recommanded_plugin_nonce'),
                 ),
                 'l10n' => array(
                     'search' => __('Search Demos', 'mantrabrain-starter-sites'),
@@ -191,7 +193,7 @@ class Mantrabrain_Demo_Importer
     /**
      * Change the admin footer text.
      *
-     * @param  string $footer_text
+     * @param string $footer_text
      * @return string
      */
     public function admin_footer_text($footer_text)
@@ -350,7 +352,8 @@ class Mantrabrain_Demo_Importer
                     'screenshot_url' => $screenshot_url,
                     'plugins' => array(),
                     'requiredTheme' => isset($package_data['template']) && !in_array($current_template, $package_data['template'], true),
-                    'requiredPlugins' => false
+                    'requiredPlugins' => false,
+                    'required_plugins' => isset($package_data['plugins_list']) ? $package_data['plugins_list'] : array()
                 );
             }
         }
@@ -468,9 +471,9 @@ class Mantrabrain_Demo_Importer
     /**
      * Import dummy content from a XML file.
      *
-     * @param  string $demo_id
-     * @param  array $demo_data
-     * @param  string $import_file
+     * @param string $demo_id
+     * @param array $demo_data
+     * @param string $import_file
      * @return bool
      */
     public function import_dummy_xml($demo_id, $demo_data, $import_file)
@@ -510,7 +513,7 @@ class Mantrabrain_Demo_Importer
     /**
      * Import site core options from its ID.
      *
-     * @param  array $demo_data
+     * @param array $demo_data
      * @return bool
      */
     public function import_core_options($demo_data)
@@ -576,9 +579,9 @@ class Mantrabrain_Demo_Importer
     /**
      * Import customizer data from a DAT file.
      *
-     * @param  string $demo_id
-     * @param  array $demo_data
-     * @param  array $status
+     * @param string $demo_id
+     * @param array $demo_data
+     * @param array $status
      * @return bool
      */
     public function import_customizer_data($demo_id, $demo_data, $import_file)
@@ -596,9 +599,9 @@ class Mantrabrain_Demo_Importer
     /**
      * Import widgets settings from WIE or JSON file.
      *
-     * @param  string $demo_id
-     * @param  array $demo_data
-     * @param  string $import_file
+     * @param string $demo_id
+     * @param array $demo_data
+     * @param string $import_file
      * @return bool
      */
     public function import_widget_settings($demo_id, $demo_data, $import_file)
@@ -647,10 +650,10 @@ class Mantrabrain_Demo_Importer
     /**
      * Updates widgets settings data.
      *
-     * @param  array $widget
-     * @param  string $widget_type
-     * @param  int $instance_id
-     * @param  array $demo_data
+     * @param array $widget
+     * @param string $widget_type
+     * @param int $instance_id
+     * @param array $demo_data
      * @return array
      */
     public function update_widget_data($widget, $widget_type, $instance_id, $demo_data)
@@ -711,8 +714,8 @@ class Mantrabrain_Demo_Importer
     /**
      * Update customizer settings data.
      *
-     * @param  array $data
-     * @param  array $demo_data
+     * @param array $data
+     * @param array $demo_data
      * @return array
      */
     public function update_customizer_data($data, $demo_data)
@@ -778,9 +781,9 @@ class Mantrabrain_Demo_Importer
     /**
      * Recursive function to address n level deep elementor data update.
      *
-     * @param  array $elementor_data
-     * @param  string $data_type
-     * @param  array $data_value
+     * @param array $elementor_data
+     * @param string $data_type
+     * @param array $data_value
      * @return array
      */
     public function elementor_recursive_update($elementor_data, $data_type, $data_value)
@@ -874,9 +877,9 @@ class Mantrabrain_Demo_Importer
     /**
      * Recursive function to address n level deep layoutbuilder data update.
      *
-     * @param  array $panels_data
-     * @param  string $data_type
-     * @param  array $data_value
+     * @param array $panels_data
+     * @param string $data_type
+     * @param array $data_value
      * @return array
      */
     public function siteorigin_recursive_update($panels_data, $data_type, $data_value)
