@@ -129,15 +129,17 @@ class Mantrabrain_Demo_Importer
         $assets_path = mb_starter_sites()->plugin_url() . '/assets/';
 
         // Register admin styles.
-        wp_register_style('mantrabrain-starter-sites', $assets_path . 'css/mantrabrain-starter-sites.css', array(), MANTRABRAIN_STARTER_SITES_VERSION);
+        wp_register_style('sweetalert2', $assets_path . 'libs/sweetalert2/css/sweetalert2.css', array(), MANTRABRAIN_STARTER_SITES_VERSION);
+        wp_register_style('mantrabrain-starter-sites', $assets_path . 'css/mantrabrain-starter-sites.css', array('sweetalert2'), MANTRABRAIN_STARTER_SITES_VERSION);
 
         // Add RTL support for admin styles.
         wp_style_add_data('mantrabrain-starter-sites', 'rtl', 'replace');
 
         // Register admin scripts.
+        wp_register_script('sweetalert2', $assets_path . 'libs/sweetalert2/js/sweetalert2.js', array('jquery'), '1.3', true);
         wp_register_script('jquery-tiptip', $assets_path . 'js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array('jquery'), '1.3', true);
-        wp_register_script('mantrabrain-demo-updates', $assets_path . 'js/admin/demo-updates' . $suffix . '.js', array('jquery', 'updates'), MANTRABRAIN_STARTER_SITES_VERSION, true);
-        wp_register_script('mantrabrain-starter-sites', $assets_path . 'js/admin/demo-importer' . $suffix . '.js', array('jquery', 'jquery-tiptip', 'wp-backbone', 'wp-a11y', 'mantrabrain-demo-updates'), MANTRABRAIN_STARTER_SITES_VERSION, true);
+        wp_register_script('mantrabrain-demo-updates', $assets_path . 'js/admin/demo-updates' . $suffix . '.js', array('jquery', 'updates', 'sweetalert2'), MANTRABRAIN_STARTER_SITES_VERSION, true);
+        wp_register_script('mantrabrain-starter-sites', $assets_path . 'js/admin/demo-importer' . $suffix . '.js', array('jquery', 'jquery-tiptip', 'wp-backbone', 'wp-a11y', 'mantrabrain-demo-updates', 'sweetalert2'), MANTRABRAIN_STARTER_SITES_VERSION, true);
 
         // Demo Importer appearance page.
         if ('appearance_page_starter-sites' === $screen_id) {
@@ -159,34 +161,45 @@ class Mantrabrain_Demo_Importer
                     'statusTextLink' => '<a href="https://mantrabrain.com/docs/demo-import-failed-issue/" target="_blank">' . __('Try this solution!', 'mantrabrain-starter-sites') . '</a>',
                 ),
             ));
-            wp_localize_script('mantrabrain-starter-sites', '_demoImporterSettings', array(
-                'demos' => $this->ajax_query_demos(true),
-                'settings' => array(
-                    'isNew' => false,
-                    'ajaxUrl' => admin_url('admin-ajax.php'),
-                    'adminUrl' => parse_url(self_admin_url(), PHP_URL_PATH),
-                    'suggestURI' => apply_filters('mantrabrain_starter_sites_suggest_new', 'https://mantrabrain.com/contact/'),
-                    'confirmReset' => __('It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the reset wizard now?', 'mantrabrain-starter-sites'),
-                    'confirmImportTitle' => __('Are you sure to import demo content?', 'mantrabrain-starter-sites'),
-                    'confirmImport' => __("Are you sure to import demo content?", 'mantrabrain-starter-sites'),
-                    'install_recommanded_plugin' => 'install_recommanded',
-                    'install_recommanded_plugin_nonce' => wp_create_nonce('mantrabrain_starter_sites_install_recommanded_plugin_nonce'),
-                ),
-                'l10n' => array(
-                    'search' => __('Search Demos', 'mantrabrain-starter-sites'),
-                    'searchPlaceholder' => __('Search demos...', 'mantrabrain-starter-sites'), // placeholder (no ellipsis)
-                    /* translators: %s: support forums URL */
-                    'error' => sprintf(__('An unexpected error occurred. Something may be wrong with Mantrabrain demo server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.', 'mantrabrain-starter-sites'), 'https://wordpress.org/support/plugin/mantrabrain-starter-sites'),
-                    'tryAgain' => __('Try Again', 'mantrabrain-starter-sites'),
-                    'suggestNew' => __('Please suggest us!', 'mantrabrain-starter-sites'),
-                    'demosFound' => __('Number of Demos found: %d', 'mantrabrain-starter-sites'),
-                    'noDemosFound' => __('No demos found. Try a different search.', 'mantrabrain-starter-sites'),
-                    'collapseSidebar' => __('Collapse Sidebar', 'mantrabrain-starter-sites'),
-                    'expandSidebar' => __('Expand Sidebar', 'mantrabrain-starter-sites'),
-                    /* translators: accessibility text */
-                    'selectFeatureFilter' => __('Select one or more Demo features to filter by', 'mantrabrain-starter-sites'),
-                ),
-            ));
+
+            $theme_slug = str_replace('-pro', '', get_option('stylesheet'));
+
+            $support_link = 'https://wordpress.org/support/theme/' . esc_attr($theme_slug) . '/reviews/?filter=5';
+
+            $rating_message = 'If you have some spare time, can you please rate our theme from <a href="' . $support_link . '" target="_blank">here</a>';
+
+            $rating_message =
+                wp_localize_script('mantrabrain-starter-sites', '_demoImporterSettings', array(
+                    'demos' => $this->ajax_query_demos(true),
+                    'settings' => array(
+                        'isNew' => false,
+                        'ajaxUrl' => admin_url('admin-ajax.php'),
+                        'adminUrl' => parse_url(self_admin_url(), PHP_URL_PATH),
+                        'suggestURI' => apply_filters('mantrabrain_starter_sites_suggest_new', 'https://mantrabrain.com/contact/'),
+                        'confirmReset' => __('It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the reset wizard now?', 'mantrabrain-starter-sites'),
+                        'confirmImportTitle' => __('Demo Import Confirmation?', 'mantrabrain-starter-sites'),
+                        'confirmImport' => __("Are you sure to import demo content?", 'mantrabrain-starter-sites'),
+                        'ratingMessage' => $rating_message,
+                        'supportLink' => $support_link,
+                        'demoImportSuccessTitle' => __('Demo Import Success', 'mantrabrain-starter-sites'),
+                        'install_recommanded_plugin' => 'install_recommanded',
+                        'install_recommanded_plugin_nonce' => wp_create_nonce('mantrabrain_starter_sites_install_recommanded_plugin_nonce'),
+                    ),
+                    'l10n' => array(
+                        'search' => __('Search Demos', 'mantrabrain-starter-sites'),
+                        'searchPlaceholder' => __('Search demos...', 'mantrabrain-starter-sites'), // placeholder (no ellipsis)
+                        /* translators: %s: support forums URL */
+                        'error' => sprintf(__('An unexpected error occurred. Something may be wrong with Mantrabrain demo server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.', 'mantrabrain-starter-sites'), 'https://wordpress.org/support/plugin/mantrabrain-starter-sites'),
+                        'tryAgain' => __('Try Again', 'mantrabrain-starter-sites'),
+                        'suggestNew' => __('Please suggest us!', 'mantrabrain-starter-sites'),
+                        'demosFound' => __('Number of Demos found: %d', 'mantrabrain-starter-sites'),
+                        'noDemosFound' => __('No demos found. Try a different search.', 'mantrabrain-starter-sites'),
+                        'collapseSidebar' => __('Collapse Sidebar', 'mantrabrain-starter-sites'),
+                        'expandSidebar' => __('Expand Sidebar', 'mantrabrain-starter-sites'),
+                        /* translators: accessibility text */
+                        'selectFeatureFilter' => __('Select one or more Demo features to filter by', 'mantrabrain-starter-sites'),
+                    ),
+                ));
         }
     }
 

@@ -446,24 +446,18 @@ window.wp = window.wp || {};
             // Set focus to current demo.
             demos.focusedDemo = this.$el;
 
-            // Construct a new Preview view.
-            demos.preview = preview = new demos.view.Preview({
-                model: this.model
-            });
 
             // Render the view and append it.
-            preview.render();
             this.setNavButtonsState();
 
             // Hide previous/next navigation if there is only one demo
             if (this.model.collection.length === 1) {
                 preview.$el.addClass('no-navigation');
-            } else {
-                preview.$el.removeClass('no-navigation');
+                $('div.wrap').append(preview.el);
+
             }
 
             // Append preview
-            $('div.wrap').append(preview.el);
 
             // Listen to our preview object
             // for `demo:next` and `demo:previous` events.
@@ -565,36 +559,66 @@ window.wp = window.wp || {};
             }
 
 
-            if (!window.confirm(wp.demos.data.settings.confirmImport)) {
-                return;
-            }
+            Swal.fire({
+                type: "warning",
+                title: wp.demos.data.settings.confirmImportTitle,
+                text: wp.demos.data.settings.confirmImport,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Import This Demo'
+            }).then((result) => {
+                if (result.value) {
+                    var required_plugins = $target.attr('data-required-plugins');
+                    if (undefined !== required_plugins && '' !== required_plugins) {
+                        var required_plugin_obj = $.parseJSON(required_plugins);
 
-            var required_plugins = $target.attr('data-required-plugins');
-            if (undefined !== required_plugins && '' !== required_plugins) {
-                var required_plugin_obj = $.parseJSON(required_plugins);
+                        var params = {
+                            data: {
+                                action: _demoImporterSettings.settings.install_recommanded_plugin,
+                                security: _demoImporterSettings.settings.install_recommanded_plugin_nonce,
+                                demowise_plugins: required_plugin_obj
+                            },
+                            ajax_url: _demoImporterSettings.settings.ajaxUrl
 
-                var params = {
-                    data: {
-                        action: _demoImporterSettings.settings.install_recommanded_plugin,
-                        security: _demoImporterSettings.settings.install_recommanded_plugin_nonce,
-                        demowise_plugins: required_plugin_obj
-                    },
-                    ajax_url: _demoImporterSettings.settings.ajaxUrl
+                        };
+                        _this.installRecommandPlugins(params);
+                    }
+                    wp.updates.maybeRequestFilesystemCredentials(event)
 
-                };
-                this.installRecommandPlugins(params);
-            }
-            wp.updates.maybeRequestFilesystemCredentials(event);
+                    wp.updates.importDemo({
+                        slug: $target.data('slug')
+                    });
+
+
+                }
+            });
 
             $(document).on('wp-demo-import-success', function (event, response) {
                 if (_this.model.get('id') === response.slug) {
                     _this.model.set({'imported': true});
+                    Swal.fire({
+                        title: wp.demos.data.settings.demoImportSuccessTitle,
+                        type: 'success',
+                        html: wp.demos.data.settings.ratingMessage,
+                        showCloseButton: false,
+                        showCancelButton: true,
+                        focusConfirm: true,
+                        confirmButtonText: 'Yes, You deserve 5 Star ! ',
+                        cancelButtonText: 'May be later!',
+
+
+                    }).then((result) => {
+                        if (result.value) {
+                            window.open(wp.demos.data.settings.supportLink, '_blank');
+
+                        }
+                    });
+
                 }
             });
 
-            wp.updates.importDemo({
-                slug: $target.data('slug')
-            });
+
         },
         installRecommandPlugins: function (params) {
 
@@ -617,289 +641,6 @@ window.wp = window.wp || {};
                 }
             });
 
-        }
-    });
-
-// Theme Preview view
-// Set ups a modal overlay with the expanded demo data
-    demos.view.Preview = wp.Backbone.View.extend({
-
-        className: 'wp-full-overlay expanded',
-        el: '.theme-install-overlay',
-
-        events: {
-            'click .close-full-overlay': 'close',
-            'click .collapse-sidebar': 'collapse',
-            'click .devices button': 'previewDevice',
-            'click .previous-theme': 'previousDemo',
-            'click .next-theme': 'nextDemo',
-            'keyup': 'keyEvent',
-            'click .demo-import': 'importDemo',
-            'click .plugins-install': 'installPlugins'
-        },
-
-        // The HTML template for the demo preview
-        html: demos.template('demo-preview'),
-
-        render: function () {
-            var self = this,
-                currentPreviewDevice,
-                data = this.model.toJSON(),
-                $body = $(document.body);
-
-            $body.attr('aria-busy', 'true');
-
-            this.$el.removeClass('iframe-ready').html(this.html(data));
-
-            currentPreviewDevice = this.$el.data('current-preview-device');
-            if (currentPreviewDevice) {
-                self.tooglePreviewDeviceButtons(currentPreviewDevice);
-            }
-
-            demos.router.navigate(demos.router.baseUrl(demos.router.demoPath + this.model.get('id')), {replace: false});
-
-            this.$el.fadeIn(200, function () {
-                $body.addClass('demo-importer-active full-overlay-active');
-            });
-
-            this.$el.find('iframe').one('load', function () {
-                self.iframeLoaded();
-            });
-        },
-
-        iframeLoaded: function () {
-            this.$el.addClass('iframe-ready');
-            $(document.body).attr('aria-busy', 'false');
-        },
-
-        close: function () {
-            this.$el.fadeOut(200, function () {
-                $('body').removeClass('demo-importer-active full-overlay-active');
-
-                // Return focus to the demo div
-                if (demos.focusedDemo) {
-                    demos.focusedDemo.focus();
-                }
-            }).removeClass('iframe-ready');
-
-            // Restore the previous browse tab if available.
-            if (demos.router.selectedTab) {
-                demos.router.navigate(demos.router.baseUrl('&browse=' + demos.router.selectedTab));
-            } else {
-                demos.router.navigate(demos.router.baseUrl(''));
-            }
-            this.trigger('preview:close');
-            this.undelegateEvents();
-            this.unbind();
-            return false;
-        },
-
-        collapse: function (event) {
-            var $button = $(event.currentTarget);
-            if ('true' === $button.attr('aria-expanded')) {
-                $button.attr({'aria-expanded': 'false', 'aria-label': l10n.expandSidebar});
-            } else {
-                $button.attr({'aria-expanded': 'true', 'aria-label': l10n.collapseSidebar});
-            }
-
-            this.$el.toggleClass('collapsed').toggleClass('expanded');
-            return false;
-        },
-
-        previewDevice: function (event) {
-            var device = $(event.currentTarget).data('device');
-
-            this.$el
-                .removeClass('preview-desktop preview-tablet preview-mobile')
-                .addClass('preview-' + device)
-                .data('current-preview-device', device);
-
-            this.tooglePreviewDeviceButtons(device);
-        },
-
-        tooglePreviewDeviceButtons: function (newDevice) {
-            var $devices = $('.wp-full-overlay-footer .devices');
-
-            $devices.find('button')
-                .removeClass('active')
-                .attr('aria-pressed', false);
-
-            $devices.find('button.preview-' + newDevice)
-                .addClass('active')
-                .attr('aria-pressed', true);
-        },
-
-        keyEvent: function (event) {
-            // The escape key closes the preview
-            if (event.keyCode === 27) {
-                this.undelegateEvents();
-                this.close();
-            }
-            // The right arrow key, next demo
-            if (event.keyCode === 39) {
-                _.once(this.nextDemo());
-            }
-
-            // The left arrow key, previous demo
-            if (event.keyCode === 37) {
-                this.previousDemo();
-            }
-        },
-
-        nextDemo: function () {
-            var self = this;
-            self.trigger('demo:next', self.model.cid);
-            return false;
-        },
-
-        previousDemo: function () {
-            var self = this;
-            self.trigger('demo:previous', self.model.cid);
-            return false;
-        },
-
-        importDemo: function (event) {
-            var _this = this,
-                $target = $(event.target);
-            event.preventDefault();
-
-            if ($target.hasClass('disabled') || $target.hasClass('updating-message')) {
-                return;
-            }
-
-            if (!window.confirm(wp.demos.data.settings.confirmImport)) {
-                return;
-            }
-
-            wp.updates.maybeRequestFilesystemCredentials(event);
-
-            // Disable the next and previous demo.
-            $('.theme-install-overlay').find('.next-theme, .previous-theme').addClass('disabled');
-
-            $(document).on('wp-demo-import-success', function (event, response) {
-                if (_this.model.get('id') === response.slug) {
-                    _this.model.set({'imported': true});
-                }
-            });
-
-            wp.updates.importDemo({
-                slug: $target.data('slug')
-            });
-        },
-
-        installPlugins: function (event) {
-            var _this = this,
-                pluginsList = $('.plugins-list-table').find('#the-list tr'),
-                $target = $('.plugins-install'),
-                success = 0,
-                error = 0,
-                errorMessages = [];
-
-            event.preventDefault();
-
-            if ($target.hasClass('disabled') || $target.hasClass('updating-message')) {
-                return;
-            }
-
-            // Bail if there were required plugins.
-            if (pluginsList.length) {
-                $('.wp-full-overlay-sidebar-content').animate({scrollTop: $(document).height()});
-
-                if ($target.html() !== wp.updates.l10n.installing) {
-                    $target.data('originaltext', $target.html());
-                }
-
-                $target
-                    .addClass('updating-message')
-                    .text(wp.updates.l10n.installing);
-                wp.a11y.speak(wp.updates.l10n.installingMsg, 'polite');
-
-                // Disable the next and previous demo.
-                $('.theme-install-overlay').find('.next-theme, .previous-theme').addClass('disabled');
-            }
-
-            wp.updates.maybeRequestFilesystemCredentials(event);
-
-            $(document).trigger('wp-plugin-bulk-install', pluginsList);
-
-            // Find all the plugins which are required.
-            pluginsList.each(function (index, element) {
-                var $itemRow = $(element);
-
-                // Only add inactive items to the update queue.
-                if (!$itemRow.hasClass('inactive') || $itemRow.find('notice-error').length) {
-                    return;
-                }
-
-                // Add it to the queue.
-                wp.updates.queue.push({
-                    action: 'install-plugin',
-                    data: {
-                        plugin: $itemRow.data('plugin'),
-                        slug: $itemRow.data('slug')
-                    }
-                });
-            });
-
-            // Display bulk notification for install of plugin.
-            $(document).on('wp-plugin-bulk-install-success wp-plugin-bulk-install-error', function (event, response) {
-                var $itemRow = $('[data-slug="' + response.slug + '"]'),
-                    $bulkActionNotice, itemName;
-
-                if ('wp-' + response.install + '-bulk-install-success' === event.type) {
-                    success++;
-                } else {
-                    itemName = response.pluginName ? response.pluginName : $itemRow.find('.plugin-name').text();
-
-                    error++;
-                    errorMessages.push(itemName + ': ' + response.errorMessage);
-                }
-
-                wp.updates.adminNotice = wp.template('wp-bulk-installs-admin-notice');
-
-                // Remove previous error messages, if any.
-                $('.plugins-details .bulk-action-notice').remove();
-
-                $('.plugins-details .plugins-info').after(wp.updates.adminNotice({
-                    id: 'bulk-action-notice',
-                    className: 'bulk-action-notice notice-alt',
-                    successes: success,
-                    errors: error,
-                    errorMessages: errorMessages,
-                    type: response.install
-                }));
-
-                $bulkActionNotice = $('#bulk-action-notice').on('click', 'button', function () {
-                    // $( this ) is the clicked button, no need to get it again.
-                    $(this)
-                        .toggleClass('bulk-action-errors-collapsed')
-                        .attr('aria-expanded', !$(this).hasClass('bulk-action-errors-collapsed'));
-                    // Show the errors list.
-                    $bulkActionNotice.find('.bulk-action-errors').toggleClass('hidden');
-                });
-
-                if (!wp.updates.queue.length) {
-                    if (error > 0) {
-                        $target
-                            .removeClass('updating-message')
-                            .text($target.data('originaltext'));
-                    } else {
-                        _this.model.set({requiredPlugins: false});
-                        _this.render();
-
-                        // Disable the next and previous demo.
-                        $('.theme-install-overlay').find('.next-theme, .previous-theme').addClass('disabled');
-                    }
-                }
-            });
-
-            // Reset admin notice template after #bulk-action-notice was added.
-            $(document).on('wp-updates-notice-added', function () {
-                wp.updates.adminNotice = wp.template('wp-updates-admin-notice');
-            });
-
-            // Check the queue, now that the event handlers have been added.
-            wp.updates.queueChecker();
         }
     });
 

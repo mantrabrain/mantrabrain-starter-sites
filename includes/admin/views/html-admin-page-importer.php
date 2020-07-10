@@ -67,9 +67,7 @@ defined( 'ABSPATH' ) || exit;
 	<# if ( data.isPro ) { #>
 		<span class="premium-demo-banner"><?php _e( 'Premium', 'mantrabrain-starter-sites' ); ?></span>
 	<# } #>
-
-	<span class="more-details"><?php _ex( 'Details &amp; Preview', 'demo', 'mantrabrain-starter-sites' ); ?></span>
-	<div class="theme-author">
+    <div class="theme-author">
 		<?php
 		/* translators: %s: Demo author name */
 		printf( __( 'By %s', 'mantrabrain-starter-sites' ), '{{{ data.author }}}' );
@@ -87,7 +85,6 @@ defined( 'ABSPATH' ) || exit;
 		<# } else { #>
 			<h2 class="theme-name" id="{{ data.id }}-name">{{{ data.name }}}</h2>
 		<# } #>
-
 		<div class="theme-actions">
 			<# if ( data.active ) { #>
 				<a class="button button-primary live-preview" target="_blank" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Live Preview', 'mantrabrain-starter-sites' ); ?></a>
@@ -103,7 +100,9 @@ defined( 'ABSPATH' ) || exit;
 					?>
 					<a data-required-plugins="{{JSON.stringify(data.required_plugins)}}"  class="button button-primary hide-if-no-js demo-import" href="#" data-name="{{ data.name }}" data-slug="{{ data.id }}" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Import', 'mantrabrain-starter-sites' ); ?></a>
 				<# } #>
-				<button class="button preview install-demo-preview"><?php _e( 'Preview', 'mantrabrain-starter-sites' ); ?></button>
+
+            <a target="_blank" href="{{ data.preview_url }}"
+				 class="button preview installed-demo-preview"><?php _e( 'Preview', 'mantrabrain-starter-sites' ); ?></a>
 			<# } #>
 		</div>
 	</div>
@@ -113,137 +112,6 @@ defined( 'ABSPATH' ) || exit;
 	<# } #>
 </script>
 
-<script id="tmpl-demo-preview" type="text/template">
-	<div class="wp-full-overlay-sidebar">
-		<div class="wp-full-overlay-header">
-			<button class="close-full-overlay"><span class="screen-reader-text"><?php _e( 'Close', 'mantrabrain-starter-sites' ); ?></span></button>
-			<button class="previous-theme"><span class="screen-reader-text"><?php _ex( 'Previous', 'Button label for a demo', 'mantrabrain-starter-sites' ); ?></span></button>
-			<button class="next-theme"><span class="screen-reader-text"><?php _ex( 'Next', 'Button label for a demo', 'mantrabrain-starter-sites' ); ?></span></button>
-			<# if ( data.isPro ) { #>
-				<a class="button button-primary purchase-now" href="{{ data.homepage }}" target="_blank"><?php _e( 'Buy Now', 'mantrabrain-starter-sites' ); ?></a>
-			<# } else if ( data.requiredTheme ) { #>
-				<button class="button button-primary hide-if-no-js disabled"><?php _e( 'Import Demo', 'mantrabrain-starter-sites' ); ?></button>
-			<# } else if ( data.requiredPlugins ) { #>
-				<button class="button button-secondary hide-if-no-js plugins-install"><?php _e( 'Install Plugins', 'mantrabrain-starter-sites' ); ?></button>
-			<# } else { #>
-				<# if ( data.active ) { #>
-					<a class="button button-primary live-preview" target="_blank" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Live Preview', 'mantrabrain-starter-sites' ); ?></a>
-				<# } else { #>
-					<a class="button button-primary hide-if-no-js demo-import" href="#" data-name="{{ data.name }}" data-slug="{{ data.id }}"><?php _e( 'Import Demo', 'mantrabrain-starter-sites' ); ?></a>
-				<# } #>
-			<# } #>
-		</div>
-		<div class="wp-full-overlay-sidebar-content">
-			<div class="install-theme-info">
-				<h3 class="theme-name">
-					{{ data.name }}
-					<# if ( data.isPro ) { #>
-						<span class="premium-demo-tag"><?php _e( 'Pro', 'mantrabrain-starter-sites' ); ?></span>
-					<# } #>
-				</h3>
-
-				<span class="theme-by">
-					<?php
-					/* translators: %s: Demo author name */
-					printf( __( 'By %s', 'mantrabrain-starter-sites' ), '{{ data.author }}' );
-					?>
-				</span>
-
-				<img class="theme-screenshot" src="{{ data.screenshot_url }}" alt="" />
-
-				<div class="theme-details">
-					<# if ( ! data.isPro ) { #>
-						<# if ( data.requiredTheme ) { #>
-							<div class="demo-message notice notice-error notice-alt"><p><?php printf( esc_html__( '%s theme is not active.', 'mantrabrain-starter-sites' ), '<strong>{{{ data.theme }}}</strong>' ); ?></p></div>
-						<# } else if ( data.requiredPlugins ) { #>
-							<div class="demo-message notice notice-info notice-alt"><p><?php esc_html_e( 'Required Plugins must be activated.', 'mantrabrain-starter-sites' ); ?></p></div>
-						<# } #>
-					<# } #>
-					<div class="theme-version">
-						<?php
-						/* translators: %s: Demo version */
-						printf( __( 'Version: %s', 'mantrabrain-starter-sites' ), '{{ data.version }}', 'mantrabrain-starter-sites' );
-						?>
-					</div>
-					<div class="theme-description">{{{ data.description }}}</div>
-				</div>
-
-				<div class="plugins-details">
-					<h4 class="plugins-info"><?php _e( 'Plugins Information', 'mantrabrain-starter-sites' ); ?></h4>
-
-					<table class="plugins-list-table widefat striped">
-						<thead>
-							<tr>
-								<th scope="col" class="manage-column required-plugins" colspan="2"><?php esc_html_e( 'Required Plugins', 'mantrabrain-starter-sites' ); ?></th>
-							</tr>
-						</thead>
-						<tbody id="the-list">
-							<# if ( ! _.isEmpty( data.plugins ) ) { #>
-								<# _.each( data.plugins, function( plugin, slug ) { #>
-									<tr class="plugin<# if ( ! plugin.is_active ) { #> inactive<# } #>" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}" data-name="{{ plugin.name }}">
-										<td class="plugin-name">
-											<a href="<?php printf( esc_url( 'https://wordpress.org/plugins/%s' ), '{{ slug }}' ); ?>" target="_blank">{{ plugin.name }}</a>
-										</td>
-										<td class="plugin-status">
-											<# if ( plugin.is_active && plugin.is_install ) { #>
-												<span class="active"></span>
-											<# } else if ( plugin.is_install ) { #>
-												<span class="activate-now<# if ( ! data.requiredPlugins ) { #> active<# } #>"></span>
-											<# } else { #>
-												<span class="install-now<# if ( ! data.requiredPlugins ) { #> active<# } #>"></span>
-											<# } #>
-										</td>
-									</tr>
-								<# }); #>
-							<# } else { #>
-								<tr class="no-items">
-									<td class="colspanchange" colspan="4"><?php esc_html_e( 'No plugins are required for this demo.', 'mantrabrain-starter-sites' ); ?></td>
-								</tr>
-							<# } #>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div class="wp-full-overlay-footer">
-			<div class="demo-import-actions">
-				<# if ( data.isPro ) { #>
-					<a class="button button-hero button-primary purchase-now" href="{{ data.homepage }}" target="_blank"><?php _e( 'Buy Now', 'mantrabrain-starter-sites' ); ?></a>
-				<# } else if ( data.requiredTheme ) { #>
-					<button class="button button-hero button-primary hide-if-no-js disabled"><?php _e( 'Import Demo', 'mantrabrain-starter-sites' ); ?></button>
-				<# } else if ( data.requiredPlugins ) { #>
-					<button class="button button-hero button-secondary hide-if-no-js plugins-install"><?php _e( 'Install Plugins', 'mantrabrain-starter-sites' ); ?></button>
-				<# } else { #>
-					<# if ( data.active ) { #>
-						<a class="button button-primary live-preview button-hero hide-if-no-js" target="_blank" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Live Preview', 'mantrabrain-starter-sites' ); ?></a>
-					<# } else { #>
-						<a class="button button-hero button-primary hide-if-no-js demo-import" href="#" data-name="{{ data.name }}" data-slug="{{ data.id }}"><?php _e( 'Import Demo', 'mantrabrain-starter-sites' ); ?></a>
-					<# } #>
-				<# } #>
-			</div>
-			<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="<?php esc_attr_e( 'Collapse Sidebar', 'mantrabrain-starter-sites' ); ?>">
-				<span class="collapse-sidebar-arrow"></span>
-				<span class="collapse-sidebar-label"><?php _e( 'Collapse', 'mantrabrain-starter-sites' ); ?></span>
-			</button>
-			<div class="devices-wrapper">
-				<div class="devices">
-					<button type="button" class="preview-desktop active" aria-pressed="true" data-device="desktop">
-						<span class="screen-reader-text"><?php esc_html_e( 'Enter desktop preview mode', 'mantrabrain-starter-sites' ); ?></span>
-					</button>
-					<button type="button" class="preview-tablet" aria-pressed="false" data-device="tablet">
-						<span class="screen-reader-text"><?php esc_html_e( 'Enter tablet preview mode', 'mantrabrain-starter-sites' ); ?></span>
-					</button>
-					<button type="button" class="preview-mobile" aria-pressed="false" data-device="mobile">
-						<span class="screen-reader-text"><?php esc_html_e( 'Enter mobile preview mode', 'mantrabrain-starter-sites' ); ?></span>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="wp-full-overlay-main">
-		<iframe src="{{ data.preview_url }}" title="<?php esc_attr_e( 'Preview', 'mantrabrain-starter-sites' ); ?>"></iframe>
-	</div>
-</script>
 
 <?php
 wp_print_request_filesystem_credentials_modal();
