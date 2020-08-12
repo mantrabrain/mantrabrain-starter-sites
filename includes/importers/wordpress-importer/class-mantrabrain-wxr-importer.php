@@ -429,7 +429,8 @@ class Mantrabrain_WXR_Importer extends WP_Importer
                 continue;
             }
 
-            $this->process_termmeta($cat, $id['term_id']);
+            $mb_term_id = isset($id['term_id']) ? $id['term_id'] : 0;
+            $this->process_termmeta($cat, $mb_term_id);
         }
 
         unset($this->categories);
@@ -532,10 +533,10 @@ class Mantrabrain_WXR_Importer extends WP_Importer
     /**
      * Add metadata to imported term.
      *
-     * @since 1.0.0
-     *
      * @param array $term Term data from WXR import.
      * @param int $term_id ID of the newly created term.
+     * @since 1.0.0
+     *
      */
     protected function process_termmeta($term, $term_id)
     {
@@ -546,11 +547,11 @@ class Mantrabrain_WXR_Importer extends WP_Importer
         /**
          * Filters the metadata attached to an imported term.
          *
-         * @since 1.0.0
-         *
          * @param array $termmeta Array of term meta.
          * @param int $term_id ID of the newly created term.
          * @param array $term Term data from the WXR import.
+         * @since 1.0.0
+         *
          */
         $term['termmeta'] = apply_filters('wp_import_term_meta', $term['termmeta'], $term_id, $term);
 
@@ -562,11 +563,11 @@ class Mantrabrain_WXR_Importer extends WP_Importer
             /**
              * Filters the meta key for an imported piece of term meta.
              *
-             * @since 1.0.0
-             *
              * @param string $meta_key Meta key.
              * @param int $term_id ID of the newly created term.
              * @param array $term Term data from the WXR import.
+             * @since 1.0.0
+             *
              */
             $key = apply_filters('import_term_meta_key', $meta['key'], $term_id, $term);
             if (!$key) {
@@ -581,11 +582,11 @@ class Mantrabrain_WXR_Importer extends WP_Importer
             /**
              * Fires after term meta is imported.
              *
-             * @since 1.0.0
-             *
              * @param int $term_id ID of the newly created term.
              * @param string $key Meta key.
              * @param mixed $value Meta value.
+             * @since 1.0.0
+             *
              */
             do_action('import_term_meta', $term_id, $key, $value);
         }
@@ -636,11 +637,11 @@ class Mantrabrain_WXR_Importer extends WP_Importer
              * Return 0 to force the post to be imported. Filter the ID to be something else
              * to override which existing post is mapped to the imported post.
              *
+             * @param int $post_exists Post ID, or 0 if post did not exist.
+             * @param array $post The post array to be inserted.
              * @see post_exists()
              * @since 1.0.0
              *
-             * @param int $post_exists Post ID, or 0 if post did not exist.
-             * @param array $post The post array to be inserted.
              */
             $post_exists = apply_filters('wp_import_existing_post', $post_exists, $post);
 

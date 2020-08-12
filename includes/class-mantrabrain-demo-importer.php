@@ -186,6 +186,7 @@ class Mantrabrain_Demo_Importer
                         'install_recommanded_plugin_nonce' => wp_create_nonce('mantrabrain_starter_sites_install_recommanded_plugin_nonce'),
                     ),
                     'l10n' => array(
+                        'importing' => __('Importing...', 'mantrabrain-starter-sites'),
                         'search' => __('Search Demos', 'mantrabrain-starter-sites'),
                         'searchPlaceholder' => __('Search demos...', 'mantrabrain-starter-sites'), // placeholder (no ellipsis)
                         /* translators: %s: support forums URL */

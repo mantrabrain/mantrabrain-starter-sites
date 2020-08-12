@@ -13,6 +13,7 @@ if (!function_exists('mantrabrain_starter_sites_supported_themes')) {
             'november-zero-pro' => 'November Zero Pro',
             'agency-ecommerce' => 'Agency Ecommerce',
             'magazinenp' => 'MagazineNP',
+            'pragyan' => 'Pragyan',
         ));
     }
 }
@@ -30,6 +31,7 @@ if (!function_exists('mantrabrain_starter_sites_demo_directory_mapping')) {
             'november-zero-pro' => 'november-zero',
             'agency-ecommerce' => 'agency-ecommerce',
             'magazinenp' => 'magazinenp',
+            'pragyan' => 'pragyan',
         ));
 
 
