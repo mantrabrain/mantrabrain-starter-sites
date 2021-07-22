@@ -12,7 +12,6 @@ Starter sites / Demo importer for Mantra Brain Themes
 == Description ==
 Starter sites / Demo importer for Mantra Brain Themes
 
-
 Get [free support](https://mantrabrain.com/support-forum/)
 
 = Mantrabrain Starter Sites/Demo Importer for Mantrabrain theme video overview: =
