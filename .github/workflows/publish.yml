@@ -16,7 +16,7 @@ jobs:
       - name: Bundle
         id: bundle
         run: |
-          zip -r mantrabrain-starter-sites.zip .
+          zip -r mantrabrain-starter-sites.zip
 
       - name: Deploy to Server
         id: deploy
