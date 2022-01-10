@@ -21,7 +21,7 @@ final class Mantrabrain_Starter_Sites
      *
      * @var string
      */
-    public $version = '1.1.2';
+    public $version = '1.1.3';
 
     /**
      * Theme single instance of this class.
@@ -150,7 +150,7 @@ final class Mantrabrain_Starter_Sites
 
         if (is_admin()) {
             include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/class-mantrabrain-demo-importer.php';
-            include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/admin/class-mantrabrain-admin-notices.php';
+            //include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/admin/class-mantrabrain-admin-notices.php';
             include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/functions.php';
             //Dashboard
             include_once MANTRABRAIN_STARTER_SITES_ABSPATH . 'includes/admin/dashboard/class-mantrabrain-admin-dashboard.php';
