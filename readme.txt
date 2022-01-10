@@ -2,8 +2,8 @@
 Contributors: Mantrabrain, ughimire1
 Tags: mantrabrain, starter sites, demo import
 Requires at least: 4.7
-Tested up to: 5.8
-Stable tag: 1.1.2
+Tested up to: 5.8.3
+Stable tag: 1.1.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
