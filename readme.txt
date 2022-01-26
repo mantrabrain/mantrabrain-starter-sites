@@ -36,7 +36,7 @@ The manual installation method involves downloading our demo importer plugin and
 
 == Changelog ==
 
-= 1.1.3 - 2022/01/26 =
+= 1.1.4 - 2022/01/26 =
 * Added - Theme Compatibility issue fixed
 * Update - 5.9 compatibility
 
