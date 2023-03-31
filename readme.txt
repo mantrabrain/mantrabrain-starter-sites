@@ -7,10 +7,10 @@ Stable tag: 1.1.5
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Starter sites / Demo importer for Mantra Brain Themes
+Starter sites / Demo importer for MantraBrain Themes
 
 == Description ==
-Starter sites / Demo importer for Mantra Brain Themes
+Starter sites / Demo importer for MantraBrain Themes
 Get [free support](https://mantrabrain.com/support-forum/)
 
 = Mantrabrain Starter Sites/Demo Importer for Mantrabrain theme video overview: =
