@@ -1,9 +1,9 @@
-=== Mantra Brain Starter Sites | Mantrabrain Theme Demo Importer ===
-Contributors: Mantrabrain, ughimire1
-Tags: mantrabrain, starter sites, demo import
+=== MantraBrain Starter Sites | MantraBrain Theme Demo Importer ===
+Contributors: MantraBrain
+Tags: MantraBrain, starter sites, demo import
 Requires at least: 4.7
-Tested up to: 5.9
-Stable tag: 1.1.4
+Tested up to: 6.2
+Stable tag: 1.1.5
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,6 +35,9 @@ The manual installation method involves downloading our demo importer plugin and
 
 
 == Changelog ==
+
+= 1.1.5 - 2023/03/31 =
+* Update - 6.2 compatibility
 
 = 1.1.4 - 2022/01/26 =
 * Added - Theme Compatibility issue fixed
