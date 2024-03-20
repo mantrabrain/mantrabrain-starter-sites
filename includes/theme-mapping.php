@@ -14,6 +14,7 @@ if (!function_exists('mantrabrain_starter_sites_supported_themes')) {
             'agency-ecommerce' => 'Agency Ecommerce',
             'magazinenp' => 'MagazineNP',
             'pragyan' => 'Pragyan',
+            'resa' => 'Resa',
         ));
     }
 }
@@ -32,6 +33,7 @@ if (!function_exists('mantrabrain_starter_sites_demo_directory_mapping')) {
             'agency-ecommerce' => 'agency-ecommerce',
             'magazinenp' => 'magazinenp',
             'pragyan' => 'pragyan',
+            'resa' => 'resa',
         ));
 
 
