@@ -21,7 +21,7 @@ final class Mantrabrain_Starter_Sites
      *
      * @var string
      */
-    public $version = '1.1.7';
+    public $version = '1.1.8';
 
     /**
      * Theme single instance of this class.
